@@ -25,9 +25,10 @@ public class Main {
 
             testReizigerDAO(new ReizigerDAOPsql(myConn));
 
-            myRS.close();
-            myStmt.close();
-            myConn.close();
+            testAdresDAO(new AdresDAOPsql(myConn));
+
+            closeConnection(myConn, myStmt, myRS);
+
         } catch (
                 Exception e) {
             System.err.println(e);
@@ -75,5 +76,43 @@ public class Main {
         System.out.print("[Test] Eerst: " + rdao.findById(77) + ", ");
         rdao.delete(rdao.findById(77));
         System.out.println("na rdao.delete(): " + rdao.findById(77));
+    }
+
+    private static void testAdresDAO(AdresDAOPsql adao) {
+        System.out.println("\n---------- Test AdresDAO -------------");
+
+        // Maak een nieuw adres aan en persisteer deze in de database
+        List<Adres> adressen = adao.findAll();
+        Adres Utrecht = new Adres(21, "3718EH", "17", "Utrechtsestraat",
+                "Utrecht", 21);
+        System.out.print("[Test] Eerst " + adressen.size() + " adressen, na AdresDAO.save() ");
+        adao.save(Utrecht);
+        adressen = adao.findAll();
+        System.out.println(adressen.size() + " adressen\n");
+
+        // Update straat van een adres
+        Adres adres = adao.findById(1);
+        System.out.print("[Test] Eerst: " + adres.getStraat() + ", ");
+        adres.setStraat("weg");
+        adao.update(adres);
+        System.out.println("na AdresDAO.update(): " + adao.findById(1).getStraat());
+
+        // Update ongedaan maken
+        adres.setStraat("Visschersplein");
+        adao.update(adres);
+
+        // Reiziger verwijderen
+        System.out.print("[Test] Eerst: " + adao.findById(21) + ", ");
+        adao.delete(adao.findById(21));
+        System.out.println("na adao.delete(): " + adao.findById(21));
+//
+        // Adres ophalen met reiziger id
+//        System.out.println("[Test] Adres vinden met reiziger: " + adao.findByReiziger());
+    }
+
+    private static void closeConnection(Connection myConn, Statement myStmt, ResultSet myRS) throws SQLException {
+        myRS.close();
+        myStmt.close();
+        myConn.close();
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ReizigerDAOPsql implements ReizigerDAO {
     private Connection conn;
+    private AdresDAO adao;
 
     public ReizigerDAOPsql(Connection conn) {
         this.conn = conn;
@@ -123,6 +124,16 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             }
             return reizigers;
 
+        } catch (Exception e) {
+            System.err.println(e);
+            return null;
+        }
+    }
+
+    @Override
+    public Adres findAdresByReizigerId(Reiziger reiziger) {
+        try {
+            return adao.findByReiziger(reiziger);
         } catch (Exception e) {
             System.err.println(e);
             return null;

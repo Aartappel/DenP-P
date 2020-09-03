@@ -1,14 +1,15 @@
 import java.sql.Date;
 
 public class Reiziger {
-    private int id;
+    private int reiziger_id;
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
     private Date geboortedatum;
+    private Adres adres;
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
-        this.id = id;
+        this.reiziger_id = id;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam = achternaam;
@@ -16,11 +17,11 @@ public class Reiziger {
     }
 
     public int getId() {
-        return id;
+        return reiziger_id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int reiziger_id) {
+        this.reiziger_id = reiziger_id;
     }
 
     public String getVoorletters() {
@@ -65,13 +66,18 @@ public class Reiziger {
         return naam.toString();
     }
 
+    public Adres getAdres() {
+        return adres;
+    }
+
     @Override
     public String toString() {
         return "reiziger: " +
-                "id: " + id +
+                "id: " + reiziger_id +
                 ", voorletters: '" + voorletters + '\'' +
                 ", tussenvoegsel: '" + tussenvoegsel + '\'' +
                 ", achternaam: '" + achternaam + '\'' +
-                ", geboortedatum: " + geboortedatum;
+                ", geboortedatum: " + geboortedatum + '\'' +
+                ", adres: " + adres;
     }
 }
