@@ -23,11 +23,14 @@ public class Main {
 
             System.out.println("Alle reizigers: \n" + reizigers);
 
+            myRS.close();
+            myStmt.close();
+
             testReizigerDAO(new ReizigerDAOPsql(myConn));
 
             testAdresDAO(new AdresDAOPsql(myConn));
 
-            closeConnection(myConn, myStmt, myRS);
+            myConn.close();
 
         } catch (
                 Exception e) {
@@ -101,18 +104,12 @@ public class Main {
         adres.setStraat("Visschersplein");
         adao.update(adres);
 
-        // Reiziger verwijderen
+        // Adres verwijderen
         System.out.print("[Test] Eerst: " + adao.findById(21) + ", ");
         adao.delete(adao.findById(21));
         System.out.println("na adao.delete(): " + adao.findById(21));
-//
+
         // Adres ophalen met reiziger id
 //        System.out.println("[Test] Adres vinden met reiziger: " + adao.findByReiziger());
-    }
-
-    private static void closeConnection(Connection myConn, Statement myStmt, ResultSet myRS) throws SQLException {
-        myRS.close();
-        myStmt.close();
-        myConn.close();
     }
 }

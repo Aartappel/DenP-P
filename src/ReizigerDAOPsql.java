@@ -20,6 +20,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pSt.setString(4, reiziger.getAchternaam());
             pSt.setDate(5, reiziger.getGeboortedatum());
             pSt.executeQuery();
+
+            pSt.close();
             return true;
 
         } catch (Exception e) {
@@ -39,6 +41,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pSt.setDate(4, reiziger.getGeboortedatum());
             pSt.setInt(5, reiziger.getId());
             pSt.executeQuery();
+
+            pSt.close();
             return true;
 
         } catch (Exception e) {
@@ -53,6 +57,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             PreparedStatement pSt = conn.prepareStatement("DELETE FROM reiziger WHERE reiziger_id = ?");
             pSt.setInt(1, reiziger.getId());
             pSt.executeQuery();
+
+            pSt.close();
             return true;
 
         } catch (Exception e) {
@@ -75,6 +81,8 @@ public class ReizigerDAOPsql implements ReizigerDAO {
                         myRS.getString("achternaam"),
                         myRS.getDate("geboortedatum"));
             }
+            myRS.close();
+            pSt.close();
             return null;
         } catch (Exception e) {
             System.err.println(e);
@@ -99,6 +107,9 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
                 reizigers.add(reiziger);
             }
+
+            myRS.close();
+            pSt.close();
             return reizigers;
         } catch (Exception e) {
             System.err.println(e);
@@ -122,6 +133,9 @@ public class ReizigerDAOPsql implements ReizigerDAO {
 
                 reizigers.add(reiziger);
             }
+
+            myRS.close();
+            stmt.close();
             return reizigers;
 
         } catch (Exception e) {

@@ -24,6 +24,8 @@ public class AdresDAOPsql implements AdresDAO {
             pSt.setString(5, adres.getWoonplaats());
             pSt.setInt(6, adres.getReiziger_id());
             pSt.executeQuery();
+
+            pSt.close();
             return true;
 
         } catch (Exception e) {
@@ -44,6 +46,8 @@ public class AdresDAOPsql implements AdresDAO {
             pSt.setInt(5, adres.getReiziger_id());
             pSt.setInt(6, adres.getAdres_id());
             pSt.executeQuery();
+
+            pSt.close();
             return true;
 
         } catch (Exception e) {
@@ -58,6 +62,8 @@ public class AdresDAOPsql implements AdresDAO {
             PreparedStatement pSt = conn.prepareStatement("DELETE FROM adres WHERE adres_id = ?");
             pSt.setInt(1, adres.getAdres_id());
             pSt.executeQuery();
+
+            pSt.close();
             return true;
 
         } catch (Exception e) {
@@ -81,6 +87,9 @@ public class AdresDAOPsql implements AdresDAO {
                         myRS.getString("woonplaats"),
                         myRS.getInt("reiziger_id"));
             }
+
+            myRS.close();
+            pSt.close();
             return null;
         } catch (Exception e) {
             System.err.println(e);
@@ -103,6 +112,9 @@ public class AdresDAOPsql implements AdresDAO {
                         myRS.getString("woonplaats"),
                         myRS.getInt("reiziger_id"));
             }
+
+            myRS.close();
+            pSt.close();
             return null;
         } catch (Exception e) {
             System.err.println(e);
@@ -127,6 +139,9 @@ public class AdresDAOPsql implements AdresDAO {
 
                 adressen.add(adres);
             }
+
+            myRS.close();
+            stmt.close();
             return adressen;
 
         } catch (Exception e) {
