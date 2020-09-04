@@ -87,7 +87,7 @@ public class Main {
         // Maak een nieuw adres aan en persisteer deze in de database
         List<Adres> adressen = adao.findAll();
         Adres Utrecht = new Adres(21, "3718EH", "17", "Utrechtsestraat",
-                "Utrecht", 21);
+                "Utrecht", 77);
         System.out.print("[Test] Eerst " + adressen.size() + " adressen, na AdresDAO.save() ");
         adao.save(Utrecht);
         adressen = adao.findAll();

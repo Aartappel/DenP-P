@@ -70,6 +70,10 @@ public class Reiziger {
         return adres;
     }
 
+    public void setAdres(Adres adres) {
+        this.adres = adres;
+    }
+
     @Override
     public String toString() {
         return "reiziger: " +
