@@ -110,6 +110,12 @@ public class Main {
         System.out.println("na adao.delete(): " + adao.findById(21));
 
         // Adres ophalen met reiziger id
-//        System.out.println("[Test] Adres vinden met reiziger: " + adao.findByReiziger());
+        Reiziger reiziger = new Reiziger(5,
+                "G", null, "Piccardo", Date.valueOf("2002-12-03"));
+        Adres adres1 = new Adres(12, "1212AB", "12", "Twaalf",
+                "Twente", 5);
+        adao.save(adres1);
+
+        System.out.println("[Test] Adres vinden met reiziger: " + adao.findByReiziger(reiziger));
     }
 }
