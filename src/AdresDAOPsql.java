@@ -17,12 +17,12 @@ public class AdresDAOPsql implements AdresDAO {
     public boolean save(Adres adres) {
         try {
             PreparedStatement pSt = conn.prepareStatement("INSERT INTO adres VALUES (?, ?, ?, ?, ?, ?)");
-            pSt.setInt(1, adres.getAdres_id());
+            pSt.setInt(1, adres.getAdresID());
             pSt.setString(2, adres.getPostcode());
             pSt.setString(3, adres.getHuisnummer());
             pSt.setString(4, adres.getStraat());
             pSt.setString(5, adres.getWoonplaats());
-            pSt.setInt(6, adres.getReiziger_id());
+            pSt.setInt(6, adres.getReiziger().getId());
             pSt.executeQuery();
 
             pSt.close();
@@ -43,8 +43,8 @@ public class AdresDAOPsql implements AdresDAO {
             pSt.setString(2, adres.getHuisnummer());
             pSt.setString(3, adres.getStraat());
             pSt.setString(4, adres.getWoonplaats());
-            pSt.setInt(5, adres.getReiziger_id());
-            pSt.setInt(6, adres.getAdres_id());
+            pSt.setInt(5, adres.getReiziger().getId());
+            pSt.setInt(6, adres.getAdresID());
             pSt.executeQuery();
 
             pSt.close();
@@ -60,7 +60,7 @@ public class AdresDAOPsql implements AdresDAO {
     public boolean delete(Adres adres) {
         try {
             PreparedStatement pSt = conn.prepareStatement("DELETE FROM adres WHERE adres_id = ?");
-            pSt.setInt(1, adres.getAdres_id());
+            pSt.setInt(1, adres.getAdresID());
             pSt.executeQuery();
 
             pSt.close();
@@ -85,7 +85,7 @@ public class AdresDAOPsql implements AdresDAO {
                         myRS.getString("huisnummer"),
                         myRS.getString("straat"),
                         myRS.getString("woonplaats"),
-                        myRS.getInt("reiziger_id"));
+                        new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")));
             }
 
             myRS.close();
@@ -110,7 +110,7 @@ public class AdresDAOPsql implements AdresDAO {
                         myRS.getString("huisnummer"),
                         myRS.getString("straat"),
                         myRS.getString("woonplaats"),
-                        myRS.getInt("reiziger_id"));
+                        new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")));
             }
 
             myRS.close();
@@ -135,7 +135,7 @@ public class AdresDAOPsql implements AdresDAO {
                         myRS.getString("huisnummer"),
                         myRS.getString("straat"),
                         myRS.getString("woonplaats"),
-                        myRS.getInt("reiziger_id"));
+                        new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")));
 
                 adressen.add(adres);
             }

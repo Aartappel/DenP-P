@@ -58,6 +58,12 @@ public class Main {
         reizigers = rdao.findAll();
         System.out.println(reizigers.size() + " reizigers\n");
 
+
+
+        rdao.save(new Reiziger(12, "V", "van", "Sloot", Date.valueOf("1993-03-19")));
+
+
+
         // Reiziger ophalen met id
         System.out.println("[Test] Reiziger met id 3: " + rdao.findById(3));
 
@@ -87,7 +93,8 @@ public class Main {
         // Maak een nieuw adres aan en persisteer deze in de database
         List<Adres> adressen = adao.findAll();
         Adres Utrecht = new Adres(21, "3718EH", "17", "Utrechtsestraat",
-                "Utrecht", 77);
+                "Utrecht",  new Reiziger(12, "S", "van", "Hoek",
+                Date.valueOf("1982-12-09")));
         System.out.print("[Test] Eerst " + adressen.size() + " adressen, na AdresDAO.save() ");
         adao.save(Utrecht);
         adressen = adao.findAll();
@@ -110,12 +117,6 @@ public class Main {
         System.out.println("na adao.delete(): " + adao.findById(21));
 
         // Adres ophalen met reiziger id
-        Reiziger reiziger = new Reiziger(5,
-                "G", null, "Piccardo", Date.valueOf("2002-12-03"));
-        Adres adres1 = new Adres(12, "1212AB", "12", "Twaalf",
-                "Twente", 5);
-        adao.save(adres1);
-
-        System.out.println("[Test] Adres vinden met reiziger: " + adao.findByReiziger(reiziger));
+        System.out.println("[Test] Adres vinden met reiziger ID 1: " + adao.findByReiziger(new Reiziger(1, "G", "van", "Rijn", Date.valueOf("2002-09-17"))));
     }
 }
