@@ -1,4 +1,5 @@
 import java.sql.Date;
+import java.util.List;
 
 public class Reiziger {
     private int reizigerID;
@@ -6,21 +7,24 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private Date geboortedatum;
+    private List<OVChipkaart> ovChipkaarten;
 
-    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
+    public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum,
+                    List<OVChipkaart> ovChipkaarten) {
         this.reizigerID = id;
         this.voorletters = voorletters;
         this.tussenvoegsel = tussenvoegsel;
         this.achternaam = achternaam;
         this.geboortedatum = geboortedatum;
+        this.ovChipkaarten = ovChipkaarten;
     }
 
-    public int getId() {
+    public int getReizigerID() {
         return reizigerID;
     }
 
-    public void setId(int reiziger_id) {
-        this.reizigerID = reiziger_id;
+    public void setReizigerID(int reizigerID) {
+        this.reizigerID = reizigerID;
     }
 
     public String getVoorletters() {
@@ -63,6 +67,18 @@ public class Reiziger {
         }
         naam.append(achternaam);
         return naam.toString();
+    }
+
+    public List<OVChipkaart> getOVChipkaarten() {
+        return ovChipkaarten;
+    }
+
+    public void addOVChipkaart(OVChipkaart ovChipkaart) {
+        this.ovChipkaarten.add(ovChipkaart);
+    }
+
+    public void removeOVChipkaart(OVChipkaart ovChipkaart) {
+        this.ovChipkaarten.remove(ovChipkaart);
     }
 
     @Override

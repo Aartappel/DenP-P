@@ -5,9 +5,19 @@ public class OVChipkaart {
     private int kaartNummer;
     private Date geldigTotDatum;
     private int klasse;
-    private float saldo;
-    private int reizigerID;
+    private double saldo;
+    private Reiziger reiziger;
     private List<Product> producten;
+
+    public OVChipkaart(int kaartNummer, Date geldigTotDatum, int klasse, double saldo, Reiziger reiziger,
+                       List<Product> producten) {
+        this.kaartNummer = kaartNummer;
+        this.geldigTotDatum = geldigTotDatum;
+        this.klasse = klasse;
+        this.saldo = saldo;
+        this.reiziger = reiziger;
+        this.producten = producten;
+    }
 
     public int getKaartNummer() {
         return kaartNummer;
@@ -33,20 +43,20 @@ public class OVChipkaart {
         this.klasse = klasse;
     }
 
-    public float getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(float saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 
-    public int getReizigerID() {
-        return reizigerID;
+    public Reiziger getReiziger() {
+        return reiziger;
     }
 
-    public void setReizigerID(int reizigerID) {
-        this.reizigerID = reizigerID;
+    public void setReiziger(Reiziger reiziger) {
+        this.reiziger = reiziger;
     }
 
     public List<Product> getProducten() {
@@ -55,5 +65,16 @@ public class OVChipkaart {
 
     public void setProducten(List<Product> producten) {
         this.producten = producten;
+    }
+
+    @Override
+    public String toString() {
+        return "OVChipkaart: " +
+                "kaartNummer: " + kaartNummer +
+                ", geldigTotDatum: " + geldigTotDatum +
+                ", klasse: " + klasse +
+                ", saldo: " + saldo +
+                ", reiziger: " + reiziger +
+                ", producten: " + producten;
     }
 }

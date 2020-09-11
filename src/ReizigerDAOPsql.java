@@ -5,6 +5,7 @@ import java.util.List;
 public class ReizigerDAOPsql implements ReizigerDAO {
     private Connection conn;
     private AdresDAO adao;
+    private OVChipkaartDAO ovdao;
 
     public ReizigerDAOPsql(Connection conn) {
         this.conn = conn;
@@ -14,7 +15,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     public boolean save(Reiziger reiziger) {
         try {
             PreparedStatement pSt = conn.prepareStatement("INSERT INTO reiziger VALUES (?, ?, ?, ?, ?)");
-            pSt.setInt(1, reiziger.getId());
+            pSt.setInt(1, reiziger.getReizigerID());
             pSt.setString(2, reiziger.getVoorletters());
             pSt.setString(3, reiziger.getTussenvoegsel());
             pSt.setString(4, reiziger.getAchternaam());
@@ -39,7 +40,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             pSt.setString(2, reiziger.getTussenvoegsel());
             pSt.setString(3, reiziger.getAchternaam());
             pSt.setDate(4, reiziger.getGeboortedatum());
-            pSt.setInt(5, reiziger.getId());
+            pSt.setInt(5, reiziger.getReizigerID());
             pSt.executeQuery();
 
             pSt.close();
@@ -55,7 +56,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     public boolean delete(Reiziger reiziger) {
         try {
             PreparedStatement pSt = conn.prepareStatement("DELETE FROM reiziger WHERE reiziger_id = ?");
-            pSt.setInt(1, reiziger.getId());
+            pSt.setInt(1, reiziger.getReizigerID());
             pSt.executeQuery();
 
             pSt.close();
@@ -75,11 +76,14 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             ResultSet myRS = pSt.executeQuery();
 
             if (myRS.next()) {
+                List<OVChipkaart> ovChipkaarten = new ArrayList<>(ovdao.findByReiziger(this.findById(ID)));
+
                 return new Reiziger(myRS.getInt("reiziger_id"),
                         myRS.getString("voorletters"),
                         myRS.getString("tussenvoegsel"),
                         myRS.getString("achternaam"),
-                        myRS.getDate("geboortedatum"));
+                        myRS.getDate("geboortedatum"),
+                        ovChipkaarten);
             }
             myRS.close();
             pSt.close();
@@ -99,11 +103,15 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             ResultSet myRS = pSt.executeQuery();
 
             while (myRS.next()) {
+                List<OVChipkaart> ovChipkaarten = new ArrayList<>(ovdao.findByReiziger(this.findById(myRS.getInt(
+                        "reiziger_id"))));
+
                 Reiziger reiziger = new Reiziger(myRS.getInt("reiziger_id"),
                         myRS.getString("voorletters"),
                         myRS.getString("tussenvoegsel"),
                         myRS.getString("achternaam"),
-                        myRS.getDate("geboortedatum"));
+                        myRS.getDate("geboortedatum"),
+                        ovChipkaarten);
 
                 reizigers.add(reiziger);
             }
@@ -125,11 +133,15 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             ResultSet myRS = stmt.executeQuery("SELECT * FROM reiziger");
 
             while (myRS.next()) {
+                List<OVChipkaart> ovChipkaarten = new ArrayList<>(ovdao.findByReiziger(this.findById(myRS.getInt(
+                        "reiziger_id"))));
+
                 Reiziger reiziger = new Reiziger(myRS.getInt("reiziger_id"),
                         myRS.getString("voorletters"),
                         myRS.getString("tussenvoegsel"),
                         myRS.getString("achternaam"),
-                        myRS.getDate("geboortedatum"));
+                        myRS.getDate("geboortedatum"),
+                        ovChipkaarten);
 
                 reizigers.add(reiziger);
             }

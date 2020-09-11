@@ -22,7 +22,7 @@ public class AdresDAOPsql implements AdresDAO {
             pSt.setString(3, adres.getHuisnummer());
             pSt.setString(4, adres.getStraat());
             pSt.setString(5, adres.getWoonplaats());
-            pSt.setInt(6, adres.getReiziger().getId());
+            pSt.setInt(6, adres.getReiziger().getReizigerID());
             pSt.executeQuery();
 
             pSt.close();
@@ -43,7 +43,7 @@ public class AdresDAOPsql implements AdresDAO {
             pSt.setString(2, adres.getHuisnummer());
             pSt.setString(3, adres.getStraat());
             pSt.setString(4, adres.getWoonplaats());
-            pSt.setInt(5, adres.getReiziger().getId());
+            pSt.setInt(5, adres.getReiziger().getReizigerID());
             pSt.setInt(6, adres.getAdresID());
             pSt.executeQuery();
 
@@ -76,7 +76,7 @@ public class AdresDAOPsql implements AdresDAO {
     public Adres findByReiziger(Reiziger reiziger) {
         try {
             PreparedStatement pSt = conn.prepareStatement("SELECT * FROM adres WHERE reiziger_id = ?");
-            pSt.setInt(1, reiziger.getId());
+            pSt.setInt(1, reiziger.getReizigerID());
             ResultSet myRS = pSt.executeQuery();
 
             if (myRS.next()) {

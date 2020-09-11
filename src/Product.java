@@ -2,8 +2,15 @@ public class Product {
     private int productNummer;
     private String naam;
     private String beschrijving;
-    private float prijs;
+    private double prijs;
     private OVChipkaart ovChipkaart;
+
+    public Product(int productNummer, String naam, String beschrijving, double prijs) {
+        this.productNummer = productNummer;
+        this.naam = naam;
+        this.beschrijving = beschrijving;
+        this.prijs = prijs;
+    }
 
     public int getProductNummer() {
         return productNummer;
@@ -29,11 +36,11 @@ public class Product {
         this.beschrijving = beschrijving;
     }
 
-    public float getPrijs() {
+    public double getPrijs() {
         return prijs;
     }
 
-    public void setPrijs(float prijs) {
+    public void setPrijs(double prijs) {
         this.prijs = prijs;
     }
 
@@ -43,5 +50,15 @@ public class Product {
 
     public void setOvChipkaart(OVChipkaart ovChipkaart) {
         this.ovChipkaart = ovChipkaart;
+    }
+
+    @Override
+    public String toString() {
+        return "Product: " +
+                "productNummer: " + productNummer +
+                ", naam: '" + naam + '\'' +
+                ", beschrijving: '" + beschrijving + '\'' +
+                ", prijs: " + prijs +
+                ", ovChipkaart: " + ovChipkaart;
     }
 }
