@@ -59,6 +59,6 @@ public class Product {
                 ", naam: '" + naam + '\'' +
                 ", beschrijving: '" + beschrijving + '\'' +
                 ", prijs: " + prijs +
-                ", ovChipkaart: " + ovChipkaart;
+                ", ovChipkaart: " + ovChipkaart.toString();
     }
 }

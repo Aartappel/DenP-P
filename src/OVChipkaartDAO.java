@@ -10,7 +10,7 @@ public interface OVChipkaartDAO {
 
     List<OVChipkaart> findByReiziger(Reiziger reiziger);
 
-    OVChipkaart findByNummer(int ID);
+    OVChipkaart findByNummer(double ID);
 
     List<OVChipkaart> findAll();
 }

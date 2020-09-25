@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -29,6 +30,8 @@ public class Main {
 //            testReizigerDAO(new ReizigerDAOPsql(myConn));
 //
 //            testAdresDAO(new AdresDAOPsql(myConn));
+
+            testProductDAO(new ProductDAOPsql(myConn));
 
             myConn.close();
 
@@ -119,4 +122,20 @@ public class Main {
 //        // Adres ophalen met reiziger id
 //        System.out.println("[Test] Adres vinden met reiziger ID 1: " + adao.findByReiziger(new Reiziger(1, "G", "van", "Rijn", Date.valueOf("2002-09-17"))));
 //    }
+
+    private static void testProductDAO(ProductDAOPsql pdao) {
+        List<Product> producten = pdao.findAll();
+        Product product = new Product(7, "testProduct1", "test product 1", 19.99);
+
+        product.setOvChipkaart(new OVChipkaart(35.283, Date.valueOf("2018-05-31"), 2,
+                25.50, null, new ArrayList<Product>()));
+
+        System.out.print("[Test] Eerst " + producten.size() + " producten, na ProductDAO.save() ");
+        pdao.save(product);
+        producten = pdao.findAll();
+        System.out.println(producten.size() + " producten\n");
+
+        // Nieuw product verwijderen
+        pdao.delete(product);
+    }
 }

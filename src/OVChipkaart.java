@@ -2,14 +2,14 @@ import java.sql.Date;
 import java.util.List;
 
 public class OVChipkaart {
-    private int kaartNummer;
+    private double kaartNummer;
     private Date geldigTotDatum;
     private int klasse;
     private double saldo;
     private Reiziger reiziger;
     private List<Product> producten;
 
-    public OVChipkaart(int kaartNummer, Date geldigTotDatum, int klasse, double saldo, Reiziger reiziger,
+    public OVChipkaart(double kaartNummer, Date geldigTotDatum, int klasse, double saldo, Reiziger reiziger,
                        List<Product> producten) {
         this.kaartNummer = kaartNummer;
         this.geldigTotDatum = geldigTotDatum;
@@ -19,11 +19,11 @@ public class OVChipkaart {
         this.producten = producten;
     }
 
-    public int getKaartNummer() {
+    public double getKaartNummer() {
         return kaartNummer;
     }
 
-    public void setKaartNummer(int kaartNummer) {
+    public void setKaartNummer(double kaartNummer) {
         this.kaartNummer = kaartNummer;
     }
 
@@ -67,6 +67,10 @@ public class OVChipkaart {
         this.producten = producten;
     }
 
+    public void addProduct(Product product) {
+        this.producten.add(product);
+    }
+
     @Override
     public String toString() {
         return "OVChipkaart: " +
@@ -75,6 +79,6 @@ public class OVChipkaart {
                 ", klasse: " + klasse +
                 ", saldo: " + saldo +
                 ", reiziger: " + reiziger +
-                ", producten: " + producten;
+                ", producten: " + producten.toString();
     }
 }

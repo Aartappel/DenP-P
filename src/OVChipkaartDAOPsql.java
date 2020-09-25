@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +10,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     public boolean save(OVChipkaart ovChipkaart) {
         try {
             PreparedStatement pSt = conn.prepareStatement("INSERT INTO ov_chipkaart VALUES (?, ?, ?, ?, ?)");
-            pSt.setInt(1, ovChipkaart.getKaartNummer());
+            pSt.setDouble(1, ovChipkaart.getKaartNummer());
             pSt.setDate(2, ovChipkaart.getGeldigTotDatum());
             pSt.setInt(3, ovChipkaart.getKlasse());
             pSt.setDouble(4, ovChipkaart.getSaldo());
@@ -21,6 +18,17 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             pSt.executeQuery();
 
             pSt.close();
+
+            for (Product product : ovChipkaart.getProducten()) {
+                PreparedStatement pStP = conn.prepareStatement("INSERT INTO ov_chipkaart_product VALUES (?, ?, ?, ?)");
+                pStP.setDouble(1, product.getOvChipkaart().getKaartNummer());
+                pStP.setInt(2, product.getProductNummer());
+                pStP.setString(3, null);
+                pStP.setDate(4, new Date(System.currentTimeMillis()));
+                pStP.executeQuery();
+
+                pStP.close();
+            }
             return true;
 
         } catch (Exception e) {
@@ -38,10 +46,22 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             pSt.setInt(2, ovChipkaart.getKlasse());
             pSt.setDouble(3, ovChipkaart.getSaldo());
             pSt.setInt(4, ovChipkaart.getReiziger().getReizigerID());
-            pSt.setInt(5, ovChipkaart.getKaartNummer());
+            pSt.setDouble(5, ovChipkaart.getKaartNummer());
             pSt.executeQuery();
 
             pSt.close();
+
+            for (Product product : ovChipkaart.getProducten()) {
+                PreparedStatement pStP = conn.prepareStatement("UPDATE ov_chipkaart_product SET kaart_nummer = ?, " +
+                        "product_nummer = ?, status = ?, last_update = ?");
+                pStP.setDouble(1, product.getOvChipkaart().getKaartNummer());
+                pStP.setInt(2, product.getProductNummer());
+                pStP.setString(3, null);
+                pStP.setDate(4, new Date(System.currentTimeMillis()));
+                pStP.executeQuery();
+
+                pStP.close();
+            }
             return true;
 
         } catch (Exception e) {
@@ -54,10 +74,19 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     public boolean delete(OVChipkaart ovChipkaart) {
         try {
             PreparedStatement pSt = conn.prepareStatement("DELETE FROM ov_chipkaart WHERE kaart_nummer = ?");
-            pSt.setInt(1, ovChipkaart.getKaartNummer());
+            pSt.setDouble(1, ovChipkaart.getKaartNummer());
             pSt.executeQuery();
 
             pSt.close();
+
+            for (Product product : ovChipkaart.getProducten()) {
+                PreparedStatement pStP = conn.prepareStatement("DELETE FROM ov_chipkaart_product " +
+                        "WHERE product_nummer = ?");
+                pStP.setInt(1, product.getProductNummer());
+                pStP.executeQuery();
+
+                pStP.close();
+            }
             return true;
 
         } catch (Exception e) {
@@ -77,12 +106,12 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             while (myRS.next()) {
                 List<Product> producten = new ArrayList<>();
 
-                OVChipkaart ovChipkaart = new OVChipkaart(myRS.getInt("kaart_nummer"),
+                OVChipkaart ovChipkaart = new OVChipkaart(myRS.getDouble("kaart_nummer"),
                         myRS.getDate("geldig_tot"),
                         myRS.getInt("klasse"),
                         myRS.getDouble("saldo"),
                         new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")),
-                        pdao.findByKaartNummer(myRS.getInt("kaart_nummer")));
+                        pdao.findByOVChipkaart(myRS.getDouble("kaart_nummer")));
 
                 ovChipkaarten.add(ovChipkaart);
             }
@@ -97,19 +126,19 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     }
 
     @Override
-    public OVChipkaart findByNummer(int nummer) {
+    public OVChipkaart findByNummer(double nummer) {
         try {
             PreparedStatement pSt = conn.prepareStatement("SELECT * FROM ov_chipkaart WHERE kaart_nummer = ?");
-            pSt.setInt(1, nummer);
+            pSt.setDouble(1, nummer);
             ResultSet myRS = pSt.executeQuery();
 
             if (myRS.next()) {
-                return new OVChipkaart(myRS.getInt("kaart_nummer"),
+                return new OVChipkaart(myRS.getDouble("kaart_nummer"),
                         myRS.getDate("geldig_tot"),
                         myRS.getInt("klasse"),
                         myRS.getDouble("saldo"),
                         new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")),
-                        pdao.findByKaartNummer(myRS.getInt("kaart_nummer")));
+                        pdao.findByOVChipkaart(myRS.getDouble("kaart_nummer")));
             }
 
             myRS.close();
@@ -131,12 +160,12 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             while (myRS.next()) {
                 List<Product> producten = new ArrayList<>();
 
-                OVChipkaart ovChipkaart = new OVChipkaart(myRS.getInt("kaart_nummer"),
+                OVChipkaart ovChipkaart = new OVChipkaart(myRS.getDouble("kaart_nummer"),
                         myRS.getDate("geldig_tot"),
                         myRS.getInt("klasse"),
                         myRS.getDouble("saldo"),
                         new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")),
-                        pdao.findByKaartNummer(myRS.getInt("kaart_nummer")));
+                        pdao.findByOVChipkaart(myRS.getDouble("kaart_nummer")));
 
                 ovChipkaarten.add(ovChipkaart);
             }

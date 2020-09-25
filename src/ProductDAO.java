@@ -9,7 +9,7 @@ public interface ProductDAO {
 
     Product findByNummer(int nummer);
 
-    List<Product> findByKaartNummer(int nummer);
+    List<Product> findByOVChipkaart(double nummer);
 
     List<Product> findAll();
 }
