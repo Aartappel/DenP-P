@@ -1,15 +1,18 @@
+import java.util.List;
+
 public class Product {
     private int productNummer;
     private String naam;
     private String beschrijving;
     private double prijs;
-    private OVChipkaart ovChipkaart;
+    private List<OVChipkaart> ovChipkaarten;
 
-    public Product(int productNummer, String naam, String beschrijving, double prijs) {
+    public Product(int productNummer, String naam, String beschrijving, double prijs, List<OVChipkaart> ovChipkaarten) {
         this.productNummer = productNummer;
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.prijs = prijs;
+        this.ovChipkaarten = ovChipkaarten;
     }
 
     public int getProductNummer() {
@@ -44,12 +47,20 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public OVChipkaart getOvChipkaart() {
-        return ovChipkaart;
+    public List<OVChipkaart> getOvChipkaarten() {
+        return ovChipkaarten;
     }
 
-    public void setOvChipkaart(OVChipkaart ovChipkaart) {
-        this.ovChipkaart = ovChipkaart;
+    public void setOVChipkaart(List<OVChipkaart> ovChipkaarten) {
+        this.ovChipkaarten = ovChipkaarten;
+    }
+
+    public void addOVChipkaart(OVChipkaart ovChipkaart) {
+        this.ovChipkaarten.add(ovChipkaart);
+    }
+
+    public void removeOVChipkaart(OVChipkaart ovChipkaart) {
+        ovChipkaarten.remove(ovChipkaart);
     }
 
     @Override
@@ -59,6 +70,6 @@ public class Product {
                 ", naam: '" + naam + '\'' +
                 ", beschrijving: '" + beschrijving + '\'' +
                 ", prijs: " + prijs +
-                ", ovChipkaart: " + ovChipkaart.toString();
+                ", ovChipkaart: " + ovChipkaarten.toString();
     }
 }

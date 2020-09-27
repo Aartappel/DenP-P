@@ -1,10 +1,10 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class ProductDAOPsql implements ProductDAO {
     private Connection conn;
+    private OVChipkaartDAOPsql odao;
 
     public ProductDAOPsql(Connection conn) {
         this.conn = conn;
@@ -22,14 +22,17 @@ public class ProductDAOPsql implements ProductDAO {
 
             pSt.close();
 
-            PreparedStatement pStOV = conn.prepareStatement("INSERT INTO ov_chipkaart_product VALUES (?, ?, ?, ?)");
-            pStOV.setDouble(1, product.getOvChipkaart().getKaartNummer());
-            pStOV.setInt(2, product.getProductNummer());
-            pStOV.setString(3, null);
-            pStOV.setDate(4, new Date(System.currentTimeMillis()));
-            pStOV.executeQuery();
+            for (OVChipkaart ovChipkaart : product.getOvChipkaarten()) {
+                PreparedStatement pStOV = conn.prepareStatement("INSERT INTO ov_chipkaart_product " +
+                        "VALUES (?, ?, ?, ?)");
+                pStOV.setDouble(1, ovChipkaart.getKaartNummer());
+                pStOV.setInt(2, product.getProductNummer());
+                pStOV.setString(3, null);
+                pStOV.setDate(4, new Date(System.currentTimeMillis()));
+                pStOV.executeQuery();
 
-            pStOV.close();
+                pStOV.close();
+            }
             return true;
 
         } catch (Exception e) {
@@ -51,15 +54,17 @@ public class ProductDAOPsql implements ProductDAO {
 
             pSt.close();
 
-            PreparedStatement pStOV = conn.prepareStatement("UPDATE ov_chipkaart_product SET kaart_nummer = ?, " +
-                    "product_nummer = ?, status = ?, last_update = ?");
-            pStOV.setDouble(1, product.getOvChipkaart().getKaartNummer());
-            pStOV.setInt(2, product.getProductNummer());
-            pStOV.setString(3, null);
-            pStOV.setDate(4, new Date(System.currentTimeMillis()));
-            pStOV.executeQuery();
+            for (OVChipkaart ovChipkaart : product.getOvChipkaarten()) {
+                PreparedStatement pStOV = conn.prepareStatement("INSERT INTO ov_chipkaart_product " +
+                        "VALUES (?, ?, ?, ?)");
+                pStOV.setDouble(1, ovChipkaart.getKaartNummer());
+                pStOV.setInt(2, product.getProductNummer());
+                pStOV.setString(3, null);
+                pStOV.setDate(4, new Date(System.currentTimeMillis()));
+                pStOV.executeQuery();
 
-            pStOV.close();
+                pStOV.close();
+            }
             return true;
 
         } catch (Exception e) {
@@ -102,7 +107,8 @@ public class ProductDAOPsql implements ProductDAO {
                 return new Product(myRS.getInt("product_nummer"),
                         myRS.getString("naam"),
                         myRS.getString("beschrijving"),
-                        myRS.getDouble("prijs"));
+                        myRS.getDouble("prijs"),
+                        odao.findByProductNummer(nummer));
             }
             myRS.close();
             pSt.close();
@@ -114,21 +120,21 @@ public class ProductDAOPsql implements ProductDAO {
     }
 
     @Override
-    public List<Product> findByOVChipkaart(double nummer) {
+    public List<Product> findByOVChipkaart(OVChipkaart ovChipkaart) {
         List<Product> producten = new ArrayList<>();
         try {
             PreparedStatement pSt = conn.prepareStatement("SELECT * FROM product " +
                     "INNER JOIN ov_chipkaart_product AS ocp ON product.product_nummer = ocp.product_nummer " +
                     "WHERE ocp.kaart_nummer = ?");
-            pSt.setDouble(1, nummer);
+            pSt.setDouble(1, ovChipkaart.getKaartNummer());
             ResultSet myRS = pSt.executeQuery();
 
             while (myRS.next()) {
-                producten.add(this.findByNummer(myRS.getInt("product_nummer")));
                 Product product = new Product(myRS.getInt("product.product_nummer"),
                         myRS.getString("product.naam"),
                         myRS.getString("product.beschrijving"),
-                        myRS.getDouble("product.prijs"));
+                        myRS.getDouble("product.prijs"),
+                        odao.findByProductNummer(myRS.getInt("product.product_nummer")));
 
                 producten.add(product);
             }
@@ -154,11 +160,11 @@ public class ProductDAOPsql implements ProductDAO {
                 Product product = new Product(myRS.getInt("product_nummer"),
                         myRS.getString("naam"),
                         myRS.getString("beschrijving"),
-                        myRS.getDouble("prijs"));
+                        myRS.getDouble("prijs"),
+                        odao.findByProductNummer(myRS.getInt("product_nummer")));
 
                 producten.add(product);
             }
-
             myRS.close();
             stmt.close();
             return producten;

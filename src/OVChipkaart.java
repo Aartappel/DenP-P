@@ -71,6 +71,10 @@ public class OVChipkaart {
         this.producten.add(product);
     }
 
+    public void removeProduct(Product product) {
+        producten.remove(product);
+    }
+
     @Override
     public String toString() {
         return "OVChipkaart: " +

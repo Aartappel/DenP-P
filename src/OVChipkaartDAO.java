@@ -12,5 +12,7 @@ public interface OVChipkaartDAO {
 
     OVChipkaart findByNummer(double ID);
 
+    List<OVChipkaart> findByProductNummer(int nummer);
+
     List<OVChipkaart> findAll();
 }

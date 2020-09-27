@@ -125,9 +125,10 @@ public class Main {
 
     private static void testProductDAO(ProductDAOPsql pdao) {
         List<Product> producten = pdao.findAll();
-        Product product = new Product(7, "testProduct1", "test product 1", 19.99);
+        Product product = new Product(7, "testProduct1", "test product 1",
+                19.99, new ArrayList<OVChipkaart>());
 
-        product.setOvChipkaart(new OVChipkaart(35.283, Date.valueOf("2018-05-31"), 2,
+        product.addOVChipkaart(new OVChipkaart(35.283, Date.valueOf("2018-05-31"), 2,
                 25.50, null, new ArrayList<Product>()));
 
         System.out.print("[Test] Eerst " + producten.size() + " producten, na ProductDAO.save() ");
