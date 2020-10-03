@@ -5,14 +5,14 @@ public class Product {
     private String naam;
     private String beschrijving;
     private double prijs;
-    private List<OVChipkaart> ovChipkaarten;
+    private List<Double> ovChipkaartNummers;
 
-    public Product(int productNummer, String naam, String beschrijving, double prijs, List<OVChipkaart> ovChipkaarten) {
+    public Product(int productNummer, String naam, String beschrijving, double prijs, List<Double> ovChipkaartNummers) {
         this.productNummer = productNummer;
         this.naam = naam;
         this.beschrijving = beschrijving;
         this.prijs = prijs;
-        this.ovChipkaarten = ovChipkaarten;
+        this.ovChipkaartNummers = ovChipkaartNummers;
     }
 
     public int getProductNummer() {
@@ -47,20 +47,22 @@ public class Product {
         this.prijs = prijs;
     }
 
-    public List<OVChipkaart> getOvChipkaarten() {
-        return ovChipkaarten;
+    public List<Double> getOvChipkaartNummers() {
+        return ovChipkaartNummers;
     }
 
-    public void setOVChipkaart(List<OVChipkaart> ovChipkaarten) {
-        this.ovChipkaarten = ovChipkaarten;
+    public void setOVChipkaarten(List<OVChipkaart> ovChipkaarten) {
+        for (OVChipkaart ovChipkaart : ovChipkaarten) {
+            this.ovChipkaartNummers.add(ovChipkaart.getKaartNummer());
+        }
     }
 
-    public void addOVChipkaart(OVChipkaart ovChipkaart) {
-        this.ovChipkaarten.add(ovChipkaart);
+    public boolean addOVChipkaart(double ovChipkaartNummer) {
+        return this.ovChipkaartNummers.add(ovChipkaartNummer);
     }
 
-    public void removeOVChipkaart(OVChipkaart ovChipkaart) {
-        ovChipkaarten.remove(ovChipkaart);
+    public boolean removeOVChipkaart(OVChipkaart ovChipkaart) {
+        return ovChipkaartNummers.remove(ovChipkaart.getKaartNummer());
     }
 
     @Override
@@ -70,6 +72,6 @@ public class Product {
                 ", naam: '" + naam + '\'' +
                 ", beschrijving: '" + beschrijving + '\'' +
                 ", prijs: " + prijs +
-                ", ovChipkaart: " + ovChipkaarten.toString();
+                ", ovChipkaart: " + ovChipkaartNummers.toString();
     }
 }

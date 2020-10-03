@@ -6,6 +6,15 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     private Connection conn;
     private ProductDAOPsql pdao;
 
+    public OVChipkaartDAOPsql(Connection conn, ProductDAOPsql pdao) {
+        this.conn = conn;
+        this.pdao = pdao;
+    }
+
+    public OVChipkaartDAOPsql(Connection conn) {
+        this.conn = conn;
+    }
+
     @Override
     public boolean save(OVChipkaart ovChipkaart) {
         try {
@@ -159,22 +168,26 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
 
     @Override
     public List<OVChipkaart> findByProductNummer(int nummer) {
+        System.out.println("start");
         List<OVChipkaart> ovChipkaarten = new ArrayList<>();
         try {
             PreparedStatement pSt = conn.prepareStatement("SELECT * FROM ov_chipkaart AS ov " +
                     "INNER JOIN ov_chipkaart_product AS ocp ON ov.kaart_nummer = ocp.kaart_nummer " +
-                    "WHERE ocp.kaart_nummer = ?");
+                    "WHERE ocp.product_nummer = ?");
             pSt.setInt(1, nummer);
             ResultSet myRS = pSt.executeQuery();
 
             while (myRS.next()) {
-                OVChipkaart ovChipkaart = new OVChipkaart(myRS.getDouble("kaart_nummer"),
-                        myRS.getDate("geldig_tot"),
-                        myRS.getInt("klasse"),
-                        myRS.getDouble("saldo"),
-                        new ReizigerDAOPsql(conn).findById(myRS.getInt("reiziger_id")),
+                System.out.println("ov next");
+                OVChipkaart ovChipkaart = new OVChipkaart(myRS.getDouble("ov.kaart_nummer"),
+                        myRS.getDate("ov.geldig_tot"),
+                        myRS.getInt("ov.klasse"),
+                        myRS.getDouble("ov.saldo"),
+                        new ReizigerDAOPsql(conn).findById(myRS.getInt("ov.reiziger_id")),
                         new ArrayList<>());
+                System.out.println("OV chipkaart -> " + ovChipkaart);
                 ovChipkaart.setProducten(pdao.findByOVChipkaart(ovChipkaart));
+                System.out.println("OV chipkaart ---> " + ovChipkaart);
 
                 ovChipkaarten.add(ovChipkaart);
             }
@@ -196,8 +209,6 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             ResultSet myRS = stmt.executeQuery("SELECT * FROM ov_chipkaart");
 
             while (myRS.next()) {
-                List<Product> producten = new ArrayList<>();
-
                 OVChipkaart ovChipkaart = new OVChipkaart(myRS.getDouble("kaart_nummer"),
                         myRS.getDate("geldig_tot"),
                         myRS.getInt("klasse"),

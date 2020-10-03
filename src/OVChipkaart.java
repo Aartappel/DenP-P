@@ -67,12 +67,12 @@ public class OVChipkaart {
         this.producten = producten;
     }
 
-    public void addProduct(Product product) {
-        this.producten.add(product);
+    public boolean addProduct(Product product) {
+        return this.producten.add(product);
     }
 
-    public void removeProduct(Product product) {
-        producten.remove(product);
+    public boolean removeProduct(Product product) {
+        return producten.remove(product);
     }
 
     @Override

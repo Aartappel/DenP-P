@@ -31,7 +31,7 @@ public class Main {
 //
 //            testAdresDAO(new AdresDAOPsql(myConn));
 
-            testProductDAO(new ProductDAOPsql(myConn));
+            testProductDAO(new ProductDAOPsql(myConn, new OVChipkaartDAOPsql(myConn)));
 
             myConn.close();
 
@@ -124,12 +124,17 @@ public class Main {
 //    }
 
     private static void testProductDAO(ProductDAOPsql pdao) {
-        List<Product> producten = pdao.findAll();
-        Product product = new Product(7, "testProduct1", "test product 1",
-                19.99, new ArrayList<OVChipkaart>());
+        OVChipkaart ovChipkaart = new OVChipkaart(35.283, Date.valueOf("2020-10-10"), 2, 30.10, null, new ArrayList<Product>());
+        System.out.println(pdao.findByOVChipkaart(ovChipkaart));
 
-        product.addOVChipkaart(new OVChipkaart(35.283, Date.valueOf("2018-05-31"), 2,
-                25.50, null, new ArrayList<Product>()));
+        List<Product> producten = pdao.findAll();
+        System.out.println("na findall");
+        Product product = new Product(7, "testProduct1", "test product 1",
+                19.99, new ArrayList<>());
+
+        product.addOVChipkaart(35.283);
+        System.out.println("na addovchipkaart");
+        System.out.println("producten: " + producten);
 
         System.out.print("[Test] Eerst " + producten.size() + " producten, na ProductDAO.save() ");
         pdao.save(product);
